@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.14: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.15.1: http://docutils.sourceforge.net/" />
 <title>Sales documents permissions by channels (teams)</title>
 <style type="text/css">
 
@@ -420,7 +420,7 @@ operation can take a while.</p>
 rule “res.partner.rule.private.employee” to something similar to:</p>
 <pre class="code python literal-block">
 <span class="p">[(</span><span class="s1">'message_follower_ids'</span><span class="p">,</span> <span class="s1">'in'</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">partner_id</span><span class="o">.</span><span class="n">ids</span><span class="p">),</span>
-<span class="s1">'|'</span><span class="p">,</span> <span class="p">(</span><span class="s1">'type'</span><span class="p">,</span> <span class="s1">'!='</span><span class="p">,</span> <span class="s1">'private'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'type'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">,</span> <span class="bp">False</span><span class="p">)]</span>
+<span class="s1">'|'</span><span class="p">,</span> <span class="p">(</span><span class="s1">'type'</span><span class="p">,</span> <span class="s1">'!='</span><span class="p">,</span> <span class="s1">'private'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'type'</span><span class="p">,</span> <span class="s1">'='</span><span class="p">,</span> <span class="kc">False</span><span class="p">)]</span>
 </pre>
 </li>
 <li><p class="first">This module modifies sales security groups hierarchy, so any other module

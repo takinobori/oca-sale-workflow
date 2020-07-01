@@ -11,9 +11,12 @@ class TestProductSet(common.TransactionCase):
         super(TestProductSet, self).setUp()
         self.sale_order = self.env['sale.order']
         self.product_set_add = self.env['product.set.add']
+        self.pricelist = self.env['product.pricelist'].create({
+            'name': 'Test pricelist'})
 
     def test_add_set(self):
         so = self.env.ref('sale.sale_order_6')
+        so.pricelist_id = self.pricelist.id
         count_lines = len(so.order_line)
         untaxed_amount = so.amount_untaxed
         tax_amount = so.amount_tax
@@ -29,10 +32,11 @@ class TestProductSet(common.TransactionCase):
         so_set.add_set()
         # checking our sale order
         self.assertEqual(len(so.order_line), count_lines + 3)
-        # untaxed_amount + ((147*1)+(2100*1)+(85*2)) * 2
-        self.assertEqual(so.amount_untaxed, untaxed_amount + 4834.0)
+        # untaxed_amount + ((147*1*0.75)+(2100*1)+(85*2)) * 2
+        # 0.75 due to a 25% discount on Custom Computer (kit) product
+        self.assertEqual(so.amount_untaxed, untaxed_amount + 4760.5)
         self.assertEqual(so.amount_tax, tax_amount + 0)  # without tax
-        self.assertEqual(so.amount_total, total_amount + 4834.0)
+        self.assertEqual(so.amount_total, total_amount + 4760.5)
         sequence = {}
         for line in so.order_line:
             sequence[line.product_id.id] = line.sequence
