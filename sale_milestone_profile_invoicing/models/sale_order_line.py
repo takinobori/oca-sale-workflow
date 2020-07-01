@@ -87,7 +87,11 @@ class SaleOrderLine(models.Model):
             )
 
     @api.multi
-    @api.depends('task_id', 'task_id.timesheet_ids.timesheet_invoice_id')
+    @api.depends(
+        'task_id',
+        'task_id.timesheet_ids.timesheet_invoice_id',
+        'task_id.timesheet_ids.unit_amount',
+    )
     def _compute_amount_invoiced_from_task(self):
         for line in self:
             total = 0
@@ -104,28 +108,34 @@ class SaleOrderLine(models.Model):
     @api.multi
     @api.depends('amount_delivered_from_task', 'product_uom_qty', 'price_unit')
     def _compute_qty_delivered(self):
-        """Change qantity delivered for line with a product milestone."""
+        """Change quantity delivered for line with a product milestone."""
         super()._compute_qty_delivered()
         for line in self:
             if line._is_linked_to_milestone_product():
-                line.qty_delivered = (
-                    line.product_uom_qty
-                    * line.amount_delivered_from_task
-                    / line.price_unit
-                )
+                if line.price_unit:
+                    line.qty_delivered = (
+                        line.product_uom_qty
+                        * line.amount_delivered_from_task
+                        / (line.price_unit)
+                    )
+                else:
+                    line.qty_delivered = 0.
 
     @api.multi
     @api.depends('amount_invoiced_from_task', 'product_uom_qty', 'price_unit')
     def _get_invoice_qty(self):
-        """Change qantity invoiced for line with a product milestone."""
+        """Change quantity invoiced for line with a product milestone."""
         super()._get_invoice_qty()
         for line in self:
             if line._is_linked_to_milestone_product():
-                line.qty_invoiced = (
-                    line.product_uom_qty
-                    * line.amount_invoiced_from_task
-                    / line.price_unit
-                )
+                if line.price_unit:
+                    line.qty_invoiced = (
+                        line.product_uom_qty
+                        * line.amount_invoiced_from_task
+                        / line.price_unit
+                    )
+                else:
+                    line.qty_invoiced = 0.
 
     @api.multi
     def _is_linked_to_milestone_product(self):
@@ -143,7 +153,7 @@ class SaleOrderLine(models.Model):
         for line in self:
             if line._is_linked_to_milestone_product():
                 mapping = line.project_id.sale_line_employee_ids.filtered(
-                    lambda r: r.sale_line_id == line.id
+                    lambda r: r.sale_line_id == line
                 )
                 if not mapping:
                     if line.qty_delivered <= line.product_uom_qty:

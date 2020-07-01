@@ -28,15 +28,36 @@ Sale Exception
 This module allows you attach several customizable exceptions to your
 sale order in a way that you can filter orders by exceptions type and fix them.
 
-This is especially useful in an scenario for mass sales order import such as
-with the base_sale_multi_channels module, because it's likely some orders have
-errors when you import them (like product not found in Odoo, wrong line
-format etc.)
+This is especially useful in an scenario for mass sales order import because
+it's likely some orders have errors when you import them (like product not
+found in Odoo, wrong line format etc.)
+
+
+When creating or editing Sale Order, configured Exception Rules are checked.
+If any is not met, the Sale Order will be blocked
+and it won't be possible to "Confirm" it.
 
 **Table of contents**
 
 .. contents::
    :local:
+
+Configuration
+=============
+
+To configure:
+
+- **Ensure your User belongs to the Exception Manager group:**
+- On the User form check the "Exception Manager" checkbox.
+  You may need to reload your browser windowi
+  before the specific menu items are visible.
+
+- **Configure the Exception Rules:**
+
+  - Open the menu item Sales » Configuration » Sales Ordersi
+    » Sale Exception Rules.
+  - Create the rules as per your needs. The "Help" tab gives additional help
+    on writing the Python expressions for this.
 
 Bug Tracker
 ===========
@@ -69,6 +90,9 @@ Contributors
 * Simone Orsi <simone.orsi@camptocamp.com>
 * SodexisTeam <dev@sodexis.com>
 * Mourad EL HADJ MIMOUNE <mourad.elhadj.mimoune@akretion.com>
+* Raphaël Reverdy <raphael.reverdy@akretion.com>
+* Florian da Costa <florian.dacosta@akretion.com>
+* Iván Todorovich <ivan.todorovich@druidoo.io>
 
 Maintainers
 ~~~~~~~~~~~
